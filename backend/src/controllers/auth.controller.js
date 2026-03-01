@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { generateToken } from '../lib/utils.js';
+import cloudinary from '../lib/cloudinary.js';
 import User from '../models/user.model.js';
 
 export const signup = async (req, res) => {
@@ -64,5 +65,23 @@ export const login = (req, res) => {
 
 export const logout = (req, res) => {
   res.cookie('jwt', '', { maxAge: 0 });
-  res.status(200).json({ message: 'Logged out successfully.'});
+  res.status(200).json({ message: 'Logged out successfully.' });
+};
+
+export const updateProfile = async (req, res) => {
+  const { profilePic } = req.body;
+  const userId = req.user._id;
+  
+  if (!profilePic) {
+    return res.status(400).json({
+      message: 'No profile pic provided.'
+    })
+  }
+  
+  const uploadRes = await cloudinary.uploader.upload(profilePic);
+  const updatedUser = await User.findByIdAndUpdate(userId, {
+    profilePic: uploadRes.secure_url
+  }, { new: true });
+  
+  res.status(200).json({updatedUser});
 };
