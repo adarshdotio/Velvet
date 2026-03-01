@@ -39,6 +39,7 @@ lerna-debug.log*
 
 # --- Documentation ---
 *.md
+frontend 2
 # Keep all READMEs everywhere as we discussed
 !**/README.md
 
