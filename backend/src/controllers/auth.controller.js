@@ -39,7 +39,7 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ message: 'All fields are required.' });
@@ -84,4 +84,8 @@ export const updateProfile = async (req, res) => {
   }, { new: true });
   
   res.status(200).json({updatedUser});
+};
+
+export const checkAuth = (req, res) => {
+  return res.status(200).json(req.user);
 };
